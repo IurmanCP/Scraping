@@ -1,13 +1,20 @@
 import csv
 import json
+import sys
+from getpass import _raw_input
 
 import requests
 
 import bs4
 import pandas as pd
 import time
-from bs4 import BeautifulSoup
 
+variable = _raw_input('Que productos desea buscar? ');
+#elemento = sys.argv[1]
+
+print("Variable pasada: ", variable)
+
+from bs4 import BeautifulSoup
 #URL of the website to scrape
 url = 'https://supermercado.laanonimaonline.com/almacen/aceites/girasol/n3_89/'
 #page = requests.get(url)
