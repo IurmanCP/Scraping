@@ -9,15 +9,17 @@ import bs4
 import pandas as pd
 import time
 
-variable = _raw_input('Que productos desea buscar? ');
+#variable = _raw_input('Que productos desea buscar? ');
 #elemento = sys.argv[1]
 
-print("Variable pasada: ", variable)
+#print("Variable pasada: ", variable)
 
 from bs4 import BeautifulSoup
 #URL of the website to scrape
-url = 'https://supermercado.laanonimaonline.com/almacen/aceites/girasol/n3_89/'
+url = 'https://supermercado.laanonimaonline.com/panificados/n2_71/pag/3/'
 #page = requests.get(url)
+if 'pag' in url:
+    print("La url tiene mas de una pagina")
 
 #print(page.text)
 
