@@ -1,6 +1,7 @@
 import csv
 import json
 import sys
+from getpass import _raw_input
 
 import requests
 
@@ -11,13 +12,36 @@ import time
 #variable = _raw_input('Que productos desea buscar? ');
 #elemento = sys.argv[1]
 
+pagina = _raw_input("Por favor ingrese la pagina de la que desea ver los precios: ")
+print("pagina ----> "+str(pagina))
+
 #print("Variable pasada: ", variable)
 
 #URL of the website to scrape
 url = 'https://supermercado.laanonimaonline.com/panificados/n2_71/pag/3/'
 #page = requests.get(url)
-if 'pag' in url:
+
+#check if another page exists
+#La anonima has this page
+pagina_extra = pagina + "pag/2/"
+
+#Send a request to the page to check if exists
+more_pages = requests.get(pagina_extra)
+resp_more_pages = bs4.BeautifulSoup(more_pages.content, 'html.parser')
+print(resp_more_pages)
+if 'mantenimiento' in resp_more_pages:
+    print("La pagina esta en mantenimiento")
+#print(pagina_extra)
+#print(more_pages)
+
+
+#establish the number of pages
+cant_paginas = 1
+if 'pag' in pagina:
     print("La url tiene mas de una pagina")
+    #we add each page to know how many there are
+    #this can be done a simpler way
+    cant_paginas = cant_paginas + 1
 
 #print(page.text)
 
