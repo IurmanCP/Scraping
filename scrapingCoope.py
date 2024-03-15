@@ -1,7 +1,6 @@
 import csv
 import json
 import sys
-from getpass import _raw_input
 
 import requests
 
@@ -14,7 +13,6 @@ import time
 
 #print("Variable pasada: ", variable)
 
-from bs4 import BeautifulSoup
 #URL of the website to scrape
 url = 'https://supermercado.laanonimaonline.com/panificados/n2_71/pag/3/'
 #page = requests.get(url)
