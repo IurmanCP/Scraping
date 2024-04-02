@@ -44,7 +44,8 @@ if 'pag' in pagina:
     cant_paginas = cant_paginas + 1
 
 #print(page.text)
-
+print("cantidad de paginas")
+print(cant_paginas)
 # Send an HTTP GET request to the website
 response = requests.get(url);
 
