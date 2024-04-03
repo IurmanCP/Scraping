@@ -8,6 +8,7 @@ import requests
 import bs4
 import pandas as pd
 import time
+import re
 
 #variable = _raw_input('Que productos desea buscar? ');
 #elemento = sys.argv[1]
@@ -28,7 +29,8 @@ pagina_extra = pagina + "pag/2/"
 #Send a request to the page to check if exists
 more_pages = requests.get(pagina_extra)
 resp_more_pages = bs4.BeautifulSoup(more_pages.content, 'html.parser')
-print(resp_more_pages)
+
+#print(resp_more_pages)
 if 'mantenimiento' in resp_more_pages:
     print("La pagina esta en mantenimiento")
 #print(pagina_extra)
@@ -53,43 +55,41 @@ response = requests.get(url);
 soup = bs4.BeautifulSoup(response.content, 'html.parser')
 
 #Stablish the csv file
-csv_file = 'precios_aceites.csv'
+#csv_file = 'precios_aceites.csv'
 
-scripts = soup.find_all('script')
+#scripts = soup.find_all('script')
 
 #Open the csv file only for writing
-with open(csv_file, 'w', newline='') as file:
-    #Create a writer csv
-    writer = csv.writer(file)
-    for script in scripts:
-        #Obtenenmo
-        script_content = script.string
-        if script_content and 'dataLayer.push' in script_content:
-            # Eliminar los caracteres no deseados y extraer los datos como un diccionario
-            data_start = script_content.find('{')
-            data_end = script_content.rfind('}') + 1
-            data_str = script_content[data_start:data_end]
-            if "var dataObject = {" not in data_str:
-                try:
-                    data_dict = eval(data_str)
-
-                    # Obtener la lista de impresiones
-                    impressions = data_dict['ecommerce']['impressions']
-
-                    # Iterar sobre las impresiones para obtener los nombres y precios de los aceites
-                    for impression in impressions:
-                        oil_name = impression['name']
-                        oil_price = float(impression['price'])
-                        writer.writerow([oil_name, oil_price])
-
-                except SyntaxError:
-                    print("Error: Sintaxis inválida en la cadena.")
 
 #Extract the relevant information from de HTML code
 #movies = []
 #for row in soup.select('sc-b0691f29-0 jbYPfh cli-children'):
 #    title = row.find('h3', class_='ipc-title__text').find('a').get_text()
 #    movies.append([title])
+
+productos = soup.find_all('div', class_='col1_listado')
+prod = soup.select('col1_listado')
+print("productos ----> ")
+print(prod)
+
+
+# Iterar sobre los elementos encontrados y extraer el texto de cada uno
+for elemento_a in prod:
+    nombre_producto = elemento_a.get_text()
+    print(nombre_producto)
+
+with open('productos.csv', mode='w', newline='') as file:
+    writer = csv.writer(file)
+    writer.writerow(['Nombre', 'Precio'])
+    for producto in productos:
+        nombre = producto.text.strip()
+        precio = producto.find_next_sibling('div', class_='precio').text.strip()
+
+        # Eliminar símbolo de moneda y espacios en blanco
+        precio = precio.replace('$', '').replace(',', '').strip()
+
+        # Escribir los datos en el archivo CSV
+        writer.writerow([nombre, precio])
 
 #Store the information in a pandas dataframe
 #df = pd.DataFrame(movies, columns=['title'])
